@@ -24,7 +24,7 @@ function Hero() {
 
           <div className="mt-8 flex flex-wrap justify-center gap-4">
             <a
-              className="block w-full rounded bg-white text-black px-12 py-3 text-sm font-medium shadow hover:bg-red-700 focus:outline-none focus:ring active:bg-red-500 sm:w-auto"
+              className="block w-full rounded bg-white text-black px-12 py-3 text-sm font-medium shadow hover:bg-emerald-400 focus:outline-none focus:ring active:bg-emerald-500 sm:w-auto"
               href="#"
             >
               Learn More
