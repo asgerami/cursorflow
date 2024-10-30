@@ -4,7 +4,7 @@ function Hero() {
   return (
     <section className="bg-black">
       <div className="flex items-baseline justify-center pt-20">
-        <h2 className="text-white border px-3 p-2 rounded-full text-center border-white">See What's New |<span className="text-emerald-400"> AI Diagrams</span></h2>
+        <h2 className="text-white border px-3 p-2 rounded-full text-center border-white">See What's New |<span className="text-emerald-400">  AI Diagrams </span></h2>
 
       </div>
       <div className="mx-auto h-screen max-w-screen-xl px-4 py-12 lg:flex">
