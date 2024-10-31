@@ -1,17 +1,24 @@
 import React from 'react'
 import Image from 'next/image'
-import { ChevronDown } from 'lucide-react'
+import { Archive, ChevronDown, Flag, Github } from 'lucide-react'
 import SideNavTopSection from './SideNavTopSection'
 import { useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs'
+import SideNavBottomSection from './SideNavBottomSection'
 
 
 function SideNav() {
   const {user} = useKindeBrowserClient();
+
+ 
   return (
     <div
-      className='bg-gray-100 h-screen fixed w-64 border-r p-6'
+      className=' h-screen fixed w-64 border-r border-[1px] p-6 flex flex-col justify-between'
       >
-       <SideNavTopSection user={user}/>
+        <div className='flex-1'><SideNavTopSection user={user}/></div>
+       
+       <div>
+        <SideNavBottomSection/>
+       </div>
     </div>
   )
 }
