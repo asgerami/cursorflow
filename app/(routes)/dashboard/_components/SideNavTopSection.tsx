@@ -27,7 +27,7 @@ export interface TEAM {
   teamName: String;
   _id: String;
 }
-function SideNavTopSection({ user }: any) {
+function SideNavTopSection({ user, setActiveTeamInfo }: any) {
   const menu = [
     {
       id: 1,
@@ -48,8 +48,12 @@ function SideNavTopSection({ user }: any) {
   const [TeamList, setTeamList] = useState<TEAM[]>();
 
   useEffect(() => {
-    user && getTeamList();
+    user&&getTeamList();
   }, [user]);
+
+  useEffect(() => {
+    activeTeam?setActiveTeamInfo(activeTeam):null
+  }, [activeTeam]);
 
   const getTeamList = async () => {
     const result = await convex.query(api.teams.getTeam, {
