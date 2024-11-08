@@ -60,7 +60,7 @@ function FileList() {
           <tbody className="divide-y divide-gray-200">
             {fileList &&
               fileList.map((file: FILE, index: number) => (
-                <tr
+                <tr key={index}
                   className="odd:bg-gray-50 cursor-pointer"
                   onClick={() => router.push("/workspace/" + file._id)}
                 >
