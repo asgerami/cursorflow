@@ -32,7 +32,7 @@ const rawDocument = {
   ],
   version: "2.8.1",
 };
-function Editor({onSaveTrigger, fileId}:any) {
+function Editor({ onSaveTrigger, fileId }: any) {
   const ref = useRef<EditorJS>();
   const updateDocument = useMutation(api.files.updateDocument);
   const [document, setDocument] = useState(rawDocument);
@@ -40,10 +40,10 @@ function Editor({onSaveTrigger, fileId}:any) {
     initEditor();
   }, []);
 
-  useEffect(()=>{
-    console.log("triiger Value",onSaveTrigger);
-    onSaveTrigger&&onSaveDocument();
-  },[onSaveTrigger])
+  useEffect(() => {
+    console.log("triiger Value", onSaveTrigger);
+    onSaveTrigger && onSaveDocument();
+  }, [onSaveTrigger]);
 
   const initEditor = () => {
     const editor = new EditorJS({
@@ -78,25 +78,29 @@ function Editor({onSaveTrigger, fileId}:any) {
   };
 
   const onSaveDocument = () => {
-    if (ref.current) 
-      {
-      ref.current.save().then((outputData) => {
-        console.log('Article data: ', outputData);
-        updateDocument({
-          _id:fileId,
-          document:JSON.stringify(outputData)
-        }).then(resp=>{
+    if (ref.current) {
+      ref.current
+        .save()
+        .then((outputData) => {
+          console.log("Article data: ", outputData);
+          updateDocument({
+            _id: fileId,
+            document: JSON.stringify(outputData)
+          }).then( resp => {
 
-            toast("Document Udated")
-          
-        },(e)=>{
-          toast("Server Error")
+                toast("Document Updated")
+              
+            },
+            (e) => {
+              toast("Server Error")
+            }
+          )
         })
-      }).catch((error:any) => {
-        console.log('Saving failed: ', error)
-      });
+        .catch((error) => {
+          console.log("Saving failed: ", error);
+        });
     }
-  }
+  };
   return (
     <div>
       <div id="editorjs" className="ml-20"></div>
