@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
-import EditorJS from "@editorjs/editorjs";
+import EditorJS, { OutputData } from "@editorjs/editorjs";
 import Header from "@editorjs/header";
 import List from "@editorjs/list";
 // @ts-ignore
@@ -10,44 +10,85 @@ import Paragraph from "@editorjs/paragraph";
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { toast } from "sonner";
+import { FILE } from "../../dashboard/_components/FileList";
+import { Id } from "@/convex/_generated/dataModel";
 
-const rawDocument = {
-  time: 1550476186479,
+const DEFAULT_INITIAL_DATA: OutputData = {
+  time: new Date().getTime(),
   blocks: [
     {
+      type: "header",
       data: {
-        text: "Document Name",
+        text: "New Document",
         level: 2,
       },
-      id: "123",
-      type: "header",
     },
     {
+      type: "paragraph",
       data: {
-        level: 4,
-      },
-      id: "1234",
-      type: "header",
-    },
+        text: "Start Writing your document here..."
+      }
+    }
   ],
   version: "2.8.1",
 };
-function Editor({ onSaveTrigger, fileId }: any) {
+function Editor({
+  onSaveTrigger,
+  fileId,
+  fileData,
+}: {
+  onSaveTrigger: boolean;
+  fileId: Id<"files"> | undefined;
+  fileData: FILE | null;
+}) {
   const ref = useRef<EditorJS>();
   const updateDocument = useMutation(api.files.updateDocument);
-  const [document, setDocument] = useState(rawDocument);
-  useEffect(() => {
-    initEditor();
-  }, []);
+  const [document, setDocument] = useState<OutputData>(DEFAULT_INITIAL_DATA);
 
   useEffect(() => {
-    console.log("triiger Value", onSaveTrigger);
-    onSaveTrigger && onSaveDocument();
+    if (!ref.current) {
+      initEditor();
+    }
+  }, [])
+
+  useEffect(() => {
+    if (fileData && ref.current) {
+      try {
+        const rawDocument = DEFAULT_INITIAL_DATA;
+        const content = fileData.document ? 
+          (() => {
+            try {
+              return JSON.parse(fileData.document);
+            } catch (error) {
+              console.error("Error parsing document:", error);
+              return rawDocument;
+            }
+          })() 
+          : rawDocument;
+        ref.current.render(content);
+        setDocument(content);
+      } catch (error) {
+        console.error("Error parsing document data:", error);
+        toast.error("Error loading document. Using default content.");
+        ref.current.render(DEFAULT_INITIAL_DATA);
+        setDocument(DEFAULT_INITIAL_DATA);
+      }
+    }
+  }, [fileData]);
+
+  useEffect(() => {
+    if (onSaveTrigger) {
+      onSaveDocument();
+    }
   }, [onSaveTrigger]);
+
 
   const initEditor = () => {
     const editor = new EditorJS({
       holder: "editorjs",
+      onReady: () => {
+        ref.current = editor;
+      },
       data: document,
       tools: {
         header: {
@@ -73,8 +114,10 @@ function Editor({ onSaveTrigger, fileId }: any) {
           inlineToolbar: true,
         },
       },
+      onChange: (api, event) => {
+        console.log('Editor content changed');
+      },
     });
-    ref.current = editor;
   };
 
   const onSaveDocument = () => {
@@ -83,19 +126,20 @@ function Editor({ onSaveTrigger, fileId }: any) {
         .save()
         .then((outputData) => {
           console.log("Article data: ", outputData);
-          updateDocument({
+          setDocument(outputData);
+          if (fileId){
+            updateDocument({
             _id: fileId,
-            document: JSON.stringify(outputData)
-          }).then( resp => {
-
-                toast("Document Updated")
-              
+            document: JSON.stringify(outputData),
+          }).then(
+            (resp) => {
+              toast("Document Updated");
             },
             (e) => {
-              toast("Server Error")
+              toast("Server Error");
             }
-          )
-        })
+          );
+        }})
         .catch((error) => {
           console.log("Saving failed: ", error);
         });
