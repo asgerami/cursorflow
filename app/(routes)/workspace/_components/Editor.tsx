@@ -26,9 +26,9 @@ const DEFAULT_INITIAL_DATA: OutputData = {
     {
       type: "paragraph",
       data: {
-        text: "Start Writing your document here..."
-      }
-    }
+        text: "Start Writing your document here...",
+      },
+    },
   ],
   version: "2.8.1",
 };
@@ -49,21 +49,21 @@ function Editor({
     if (!ref.current) {
       initEditor();
     }
-  }, [])
+  }, []);
 
   useEffect(() => {
     if (fileData && ref.current) {
       try {
         const rawDocument = DEFAULT_INITIAL_DATA;
-        const content = fileData.document ? 
-          (() => {
-            try {
-              return JSON.parse(fileData.document);
-            } catch (error) {
-              console.error("Error parsing document:", error);
-              return rawDocument;
-            }
-          })() 
+        const content = fileData.document
+          ? (() => {
+              try {
+                return JSON.parse(fileData.document);
+              } catch (error) {
+                console.error("Error parsing document:", error);
+                return rawDocument;
+              }
+            })()
           : rawDocument;
         ref.current.render(content);
         setDocument(content);
@@ -81,7 +81,6 @@ function Editor({
       onSaveDocument();
     }
   }, [onSaveTrigger]);
-
 
   const initEditor = () => {
     const editor = new EditorJS({
@@ -115,7 +114,7 @@ function Editor({
         },
       },
       onChange: (api, event) => {
-        console.log('Editor content changed');
+        console.log("Editor content changed");
       },
     });
   };
@@ -127,19 +126,20 @@ function Editor({
         .then((outputData) => {
           console.log("Article data: ", outputData);
           setDocument(outputData);
-          if (fileId){
+          if (fileId) {
             updateDocument({
-            _id: fileId,
-            document: JSON.stringify(outputData),
-          }).then(
-            (resp) => {
-              toast("Document Updated");
-            },
-            (e) => {
-              toast("Server Error");
-            }
-          );
-        }})
+              _id: fileId,
+              document: JSON.stringify(outputData),
+            }).then(
+              (resp) => {
+                toast("Document Updated");
+              },
+              (e) => {
+                toast("Server Error");
+              }
+            );
+          }
+        })
         .catch((error) => {
           console.log("Saving failed: ", error);
         });

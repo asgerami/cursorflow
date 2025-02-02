@@ -8,8 +8,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useRouter } from "next/navigation";
@@ -60,7 +58,8 @@ function FileList() {
           <tbody className="divide-y divide-gray-200">
             {fileList &&
               fileList.map((file: FILE, index: number) => (
-                <tr key={index}
+                <tr
+                  key={index}
                   className="odd:bg-gray-50 cursor-pointer"
                   onClick={() => router.push("/workspace/" + file._id)}
                 >

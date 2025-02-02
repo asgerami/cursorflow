@@ -9,25 +9,24 @@ import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
-
 function CreateTeam() {
   const [teamName, setTeamName] = useState("");
   const createTeam = useMutation(api.teams.createTeam);
-  const {user}:any = useKindeBrowserClient();
+  const { user }: any = useKindeBrowserClient();
   const router = useRouter();
 
-  const createNewTeam =()=>{
+  const createNewTeam = () => {
     createTeam({
       teamName: teamName,
       createdBy: user?.email,
-    }).then((resp)=>{
+    }).then((resp) => {
       console.log(resp);
-      if(resp){
-        router.push('/dashboard');
-        toast('Team Created Successfully!')
+      if (resp) {
+        router.push("/dashboard");
+        toast("Team Created Successfully!");
       }
-    })
-  }
+    });
+  };
 
   return (
     <div className="px-6 md:px-16 my-16">

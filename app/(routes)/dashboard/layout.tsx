@@ -32,15 +32,13 @@ function DashboardLayout({
 
   return (
     <div>
-      <FileListContext.Provider value={{fileList_, setFileList_}}>
-      <div className="grid grid-cols-4">
-        <div className="h-screen w-7 fixed">
-          <SideNav />
-        </div>
-        <div className="col-span-4 ml-72">
-          {children}
+      <FileListContext.Provider value={{ fileList_, setFileList_ }}>
+        <div className="grid grid-cols-4">
+          <div className="h-screen w-7 fixed">
+            <SideNav />
           </div>
-      </div>
+          <div className="col-span-4 ml-72">{children}</div>
+        </div>
       </FileListContext.Provider>
     </div>
   );
