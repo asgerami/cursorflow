@@ -8,6 +8,7 @@ import { useConvex } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { FILE } from "../../dashboard/_components/FileList";
 import { Id } from "@/convex/_generated/dataModel";
+import Canvas from "../_components/Canvas";
 
 function Workspace() {
   const params = useParams();
@@ -52,7 +53,9 @@ function Workspace() {
           />
         </div>
         {/* Whiteboard/canvas */}
-        <div className="bg-blue-600 h-screen">Canvas</div>
+        <div className="h-screen">
+          <Canvas />
+        </div>
       </div>
     </div>
   );
